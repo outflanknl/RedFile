@@ -1,0 +1,15 @@
+FROM python:3.8-slim-buster
+EXPOSE 8000
+
+RUN apt-get update -y; apt-get upgrade -y
+# You don't technically need these, but I get kind of twitchy if I don't have vim installed
+RUN apt-get update && apt-get install -y --no-install-recommends python3 python3-virtualenv vim ssh
+
+# Install dependencies:
+COPY code/requirements.txt .
+RUN pip install -r requirements.txt
+
+COPY code/docker-entrypoint.sh /usr/local/bin/
+RUN ln -s /usr/local/bin/docker-entrypoint.sh / # backwards compat
+ENTRYPOINT ["docker-entrypoint.sh"]
+CMD ["id"]

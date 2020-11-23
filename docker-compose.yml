@@ -1,0 +1,28 @@
+version: '3'
+
+# Run as
+# docker-compose build; docker-compose up -d
+# Check with
+# docker ps
+# Then check the logs with
+# docker logs --tail 50 $service_name
+# docker-compose images
+# docker-compose logs --tail 20 $service_name
+
+services:
+  redfile:
+    build:
+      context: .
+      dockerfile: Dockerfile-REDFILE
+    volumes:
+      - ./code/:/code/
+    ports:
+      - 8001:8000
+    networks:
+      - app-tier
+    command:
+      /usr/bin/tail -f /var/log/lastlog
+
+networks:
+  app-tier:
+    driver: bridge
