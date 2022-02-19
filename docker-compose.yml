@@ -22,7 +22,10 @@ services:
       - app-tier
     command:
       /usr/bin/tail -f /var/log/lastlog
+    extra_hosts:
+      - host.docker.internal:host-gateway
 
 networks:
   app-tier:
     driver: bridge
+    

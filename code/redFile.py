@@ -44,7 +44,7 @@ app.logger.addHandler(toStderr)
 
 #sys.path.append('/code/m/')
 
-@app.route('/<hash>/<key>/<filename>')
+@app.route('/<hash>/<key>/<filename>',methods=['GET','POST'])
 def genFile(hash,key,filename):
     try:
         app.logger.debug("importing m.%s"%hash)
