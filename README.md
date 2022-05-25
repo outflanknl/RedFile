@@ -37,3 +37,18 @@ The key is a string appended with an md5 of "that first half string + a secret".
 
 example:
 `http://127.0.0.1:8001/keyer/7103f096074271321c6cebd743ac8d9b5b6b52d65f7e16a8a08a33570275a750/`
+
+## onePerUser
+Now next level, if you can build a payload that will include the username in the call have a look at:
+```
+http://127.0.0.1:18080/onePerUser/?u=John
+http://127.0.0.1:18080/onePerUser/?u=Alice
+http://127.0.0.1:18080/onePerUser/?u=NotExisting
+```
+You will see that john.txt and alice.txt get served once, notextist.txt isn't available so error.txt will be served once there.
+All calls after that point will serve 'default.txt'. 
+
+Consider a cronjob that deletes data.shelve every night to have a select group of users being served a payload once a day :)
+
+# OPSEC
+ofcourse, this is proof of concept code. Consider using a proxy like haproxy to rewrite calls and have them end up at the correct module, also consider building encryption of obfuscation on the url and parameter.
