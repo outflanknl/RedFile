@@ -22,6 +22,11 @@ import os,sys
 import logging
 import traceback
 #import sys
+from werkzeug.routing import BaseConverter
+
+class WildcardConverter(BaseConverter):
+    regex = r'(|/.*?)'
+    weight = 200
 
 ### add CWD to path
 #cwd = os.path.dirname(os.path.realpath(__file__))
@@ -37,6 +42,7 @@ toStderr.setFormatter(formatter)
 
 
 app = Flask(__name__)
+app.url_map.converters['wildcard'] = WildcardConverter
 logging.basicConfig(level=logging.DEBUG)
 CORS(app)
 app.logger.addHandler(toFile) 
@@ -44,18 +50,19 @@ app.logger.addHandler(toStderr)
 
 #sys.path.append('/code/m/')
 
-@app.route('/<hash>/<key>/<filename>',methods=['GET','POST'])
-def genFile(hash,key,filename):
+@app.route('/<module>',methods=['GET','POST'])
+@app.route('/<module><wildcard:restpath>',methods=['GET','POST'])
+def genFile(module,restpath=None):
     try:
-        app.logger.debug("importing m.%s"%hash)
-        m  = importlib.import_module('m.%s'%hash)
+        app.logger.debug("importing m.%s"%module)
+        m  = importlib.import_module('m.%s'%module)
     except Exception as e:
-        app.logger.error('Module %s not found'%(hash))
+        app.logger.error('Module %s not found'%(module))
         app.logger.error('Went looking in %s'%sys.path)
         stackTrace = traceback.format_exc()
         app.logger.exception(e)
         abort(404)
-    r = m.f(key,hash,request)
+    r = m.f(module,request)
     response = make_response(r.fileContent())
     response.headers['Content-Type'] = r.fileType()
     return response
