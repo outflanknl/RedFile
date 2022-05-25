@@ -7,12 +7,12 @@ import requests,json
 import helper
 
 ## usage:
-# http://127.0.0.1:18080/agent/test/test
+# http://127.0.0.1:18080/agent/one/two
 # basic url .....................|modname|key.....|notused
 class f():
   def __init__(self,key,h,req={}):
     uaString = req.headers.get('User-Agent')
-    temp = {}
+    temp = {'key':key,'h':h}
     for k,v in req.headers:
         temp[str(k)] = str(v)
     self.auJson = json.loads(json.dumps(temp))

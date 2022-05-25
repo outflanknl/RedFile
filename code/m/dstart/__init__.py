@@ -18,12 +18,12 @@ log_host = "127.0.0.1"
 
 fileTable = {-2 : "debug.only.txt",
              -1 : "error.txt",
-              0 : "error.txt",
-              1 : "leeg.txt",
-              2 : "leeg.txt"}
+              0 : "payload.txt",
+              1 : "payload.txt",
+              2 : "empty.txt"}
 
 for i in range(3,999):
-    fileTable[i] = "leeg2.txt"
+    fileTable[i] = "empty2.txt"
 
 #for i in range(5,999):
 #    fileTable[i] = "monkey.jpg"
