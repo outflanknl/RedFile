@@ -26,8 +26,9 @@ for i in range(5,99):
 # http://127.0.0.1:18080/keyer/7103f096074271321c6cebd743ac8d9b5b6b52d65f7e16a8a08a33570275a750/test
 # basic url or redirector.....................|modname|key.....|notused
 class f():
-  def __init__(self,key,h,req={}):
-    self.key = key.encode("utf-8",'ignore')
+  def __init__(self,module,req={}):
+    self.key = req.path.split('/')[2]
+    #self.key = key.encode("utf-8",'ignore')
     cwd = os.path.dirname(os.path.realpath(__file__))
     self.folder = cwd
     self.scoreRes = self.score()
@@ -45,7 +46,7 @@ class f():
     chk = "%s%s"%(secret,tok)
     if stok == md5(chk.encode('utf-8')).hexdigest():
       #the key is valid
-      if not self.key in d.has_key:
+      if not self.key in d.keys():
         #the key is new
         d[self.key] = 1
         return(1)
@@ -57,6 +58,7 @@ class f():
   def fileContent(self):
     ff = self.returnFile
     with open("%s/%s"%(self.folder,ff), 'rb') as f:
+      #return("%s %s"%(self.returnFile,self.key)) ## useful for debugging
       return f.read()
 
   def fileType(self):

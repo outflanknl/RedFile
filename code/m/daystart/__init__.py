@@ -32,7 +32,7 @@ for i in range(3,999):
 # http://127.0.0.1:18080/dstart/test/?name=testName
 # basic url or redirector.....................|modname|key.....|notused
 class f():
-    def __init__(self,key,h,req={}):
+    def __init__(self,module,req={}):
         self.key = datetime.date.today().strftime("%Y%m%d")
         cwd = os.path.dirname(os.path.realpath(__file__))
         self.folder = cwd
