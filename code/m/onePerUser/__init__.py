@@ -14,6 +14,10 @@ import requests
 ### CONSTANTS
 #log_host = "host.docker.internal"
 log_host = False
+logger = logging.getLogger("onePerUser")
+fh = logging.FileHandler('onePerUser.log')
+fh.setLevel(logging.INFO)
+logger.addHandler(fh)
 
 fileTable = { -1 : "error.txt"}
 for i in range(2,999):
@@ -25,10 +29,6 @@ for i in range(2,999):
 # basic url or redirector.....................|modname|key.....|notused
 class f():
   def __init__(self,module,req={}):
-    self.logger = logging.getLogger(module)
-    fh = logging.FileHandler('%s.log'%module)
-    fh.setLevel(logging.INFO)
-    self.logger.addHandler(fh)
     self.userName = req.args.get('u')
     #self.key = key.encode("utf-8",'ignore')
     cwd = os.path.dirname(os.path.realpath(__file__))
@@ -43,7 +43,7 @@ class f():
           self.returnFile = fileTable[-1]
     if log_host:
         r =requests.get('http://%s/log/sx_ll1/?mod=%s&served=%s&userName=%s&score%s'%(log_host,module,self.returnFile,self.userName,self.scoreRes))
-    self.logger.info('END module:%s served:%s user:%s score:%s %s'%(module,self.returnFile,self.userName,self.scoreRes,req.data))
+    logger.info('END module:%s served:%s user:%s score:%s %s'%(module,self.returnFile,self.userName,self.scoreRes,req.data))
 
   def score(self):
     d = shelve.open('%s/data.shelve'%self.folder)
